@@ -1,6 +1,4 @@
 # REALTIME-CHAT
-TYPE
-
-npm run dev 
+TYPE <a href="#">npm run dev</a> 
 
 to RUN this PROJECT
