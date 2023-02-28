@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+</head>
+<body>
+    <main>
+        <div id="container"></div>
+        <form id="chat">
+            <input type="text" placeholder="Message..." name="message">
+            <button>Send</button>
+        </form>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const $container = document.getElementById('container')
+        let chat = []
+
+        const createChat = ({message, sender}) => {
+            const payload = `
+                <article>
+                    <strong>${sender}</strong>
+                    <p>${message}</p>
+                </article>
+            `
+            return payload
+        }
+
+        const render = () => {
+            $container.innerHTML = ''
+
+            chat.forEach(c => {
+                const chatElement = createChat({message: c.message, sender: c.sender})
+                $container.innerHTML += chatElement
+            })
+        }
+    </script>
+    <script>
+        const queryParams = new URLSearchParams(window.location.search)
+        const sender = queryParams.get('username')
+        const socket = io()
+        const $form = document.getElementById('chat')
+
+        $form.onsubmit = e => {
+            e.preventDefault()
+
+            socket.emit('send', {
+                sender,
+                message: e.target.message.value
+            })
+
+            e.target.reset()
+        }
+
+        socket.emit('notification', sender)
+
+        socket.on('notification', user => {
+            chat.push({
+                sender: 'System',
+                message: user + ' Has Joined',
+            })
+            render()
+        })
+
+        socket.on('receive', ({message, sender}) => {
+            chat.push({message, sender})
+            render()
+
+        })
+    </script>
+</body>
+</html>
