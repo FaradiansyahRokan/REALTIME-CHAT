@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/index.js",
+    "test": "node /dist/index.js",
     "dev": "concurrently \"tsc --watch\" \"nodemon ./dist/index.js\"",
-    "build": "tsc -w"
+    "build": "tsc -p tsconfig.json"
   },
   "keywords": [],
   "author": "",

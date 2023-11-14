@@ -12,7 +12,7 @@ const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
 const io = new socket_io_1.Server(server);
 io.on('connection', socket => {
-    console.log('Connect');9
+    console.log('Connect');
     socket.on('send', ({ sender, message }) => {
         io.emit('receive', { sender, message });
     });
